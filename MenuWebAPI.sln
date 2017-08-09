@@ -5,7 +5,11 @@ VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuWebAPI", "MenuWebAPI\MenuWebAPI.csproj", "{159FB70A-CEC7-499A-82A6-01DEBC6F7A82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Menu", "Menu\Menu.csproj", "{DFC3C5AD-8787-4308-B307-D53F61CC6D7C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuProject", "Menu\MenuProject.csproj", "{DFC3C5AD-8787-4308-B307-D53F61CC6D7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuUnitTest", "MenuUnitTest\MenuUnitTest.csproj", "{A58D1325-3D81-441A-B318-83202CD1C00C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuProjectDAL", "MenuProjectDAL\MenuProjectDAL.csproj", "{63C2C12D-AAC0-490E-848C-DEEDCA78EF15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{DFC3C5AD-8787-4308-B307-D53F61CC6D7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFC3C5AD-8787-4308-B307-D53F61CC6D7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFC3C5AD-8787-4308-B307-D53F61CC6D7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A58D1325-3D81-441A-B318-83202CD1C00C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A58D1325-3D81-441A-B318-83202CD1C00C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A58D1325-3D81-441A-B318-83202CD1C00C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A58D1325-3D81-441A-B318-83202CD1C00C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63C2C12D-AAC0-490E-848C-DEEDCA78EF15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63C2C12D-AAC0-490E-848C-DEEDCA78EF15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63C2C12D-AAC0-490E-848C-DEEDCA78EF15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63C2C12D-AAC0-490E-848C-DEEDCA78EF15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

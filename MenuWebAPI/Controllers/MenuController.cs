@@ -4,9 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Menu;
+using MenuProject;
 using System.Threading.Tasks;
 using System.Web.Http.Cors;
+using MenuProjectDAL;
+using MenuWebAPI.Models;
+using Newtonsoft.Json;
 
 namespace MenuWebAPI.Controllers
 {
@@ -15,25 +18,25 @@ namespace MenuWebAPI.Controllers
         [EnableCors(origins:"*", headers:"*",methods:"*")]
         /// <summary>
         /// default GET
-        /// route : api/Shape
+        /// route : api/Menu/GetMenu
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IEnumerable<Food> GetMenu()
+        public string GetMenu()
         {
-            return MenuData.fooddata;
+            
+            List<MenuItem> returnedMenu = MenuDAO.CreateMenu();
+            string json = JsonConvert.SerializeObject(returnedMenu);
+            return json;
+            
         }
 
+/*  As I choose to add functionality to the menu, I will modify these controllers
         [AcceptVerbs("GET")]
-        public IHttpActionResult GetFood(string name)
-        {
-            Food foodname = MenuData.fooddata.FirstOrDefault();
-
-            return Ok(foodname);
-        }
 
         [HttpPost]
-        public IHttpActionResult PostShape(Food data)
+        [Route("api/Post/{index}")]
+        public IHttpActionResult PostFood(Food data)
         {
             if (!ModelState.IsValid)
             {
@@ -45,17 +48,6 @@ namespace MenuWebAPI.Controllers
         }
 
 
-        /*This needs to be edited to find different ways to sort the menu items.
-         * // async GET method to get shapes by type
-        [HttpGet]
-         * public async Task<IHttpActionResult> GetShapeByTypeAsync(string type)
-        {
-            var result = await MenuData.SelectShapesByType(type);
-            return Ok(result);
-        }
-        */
-
-
         [HttpDelete]
         [Route("api/Delete/{index}")]
         public IHttpActionResult DeleteFoodAtIndex(int index)
@@ -64,7 +56,7 @@ namespace MenuWebAPI.Controllers
             {
                 MenuData.fooddata.RemoveAt(index);
             }
-            catch (ArgumentOutOfRangeException ex)
+            catch (ArgumentOutOfRangeException)
             {
                 // log the exception ex.Message
 
@@ -73,5 +65,6 @@ namespace MenuWebAPI.Controllers
 
             return Ok(MenuData.fooddata);
         }
+*/
     }
 }

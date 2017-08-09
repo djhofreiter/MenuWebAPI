@@ -1,0 +1,614 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="WidowmakerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="pk_cartID" />
+          </Key>
+          <Property Name="pk_cartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_userName" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="fk_cartItemID" Type="int" />
+          <Property Name="totalCost" Type="decimal" Precision="6" Scale="2" />
+        </EntityType>
+        <EntityType Name="CartItem">
+          <Key>
+            <PropertyRef Name="pk_cartItemID" />
+          </Key>
+          <Property Name="pk_cartItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="fk_foodID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CompletedTransaction">
+          <Key>
+            <PropertyRef Name="pk_transactionID" />
+          </Key>
+          <Property Name="pk_transactionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_cartID" Type="int" Nullable="false" />
+          <Property Name="fk_userName" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="fk_paymentID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="pk_userName" />
+          </Key>
+          <Property Name="pk_userName" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="userPassword" Type="nvarchar" MaxLength="16" />
+          <Property Name="firstname" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="lastname" Type="varchar" MaxLength="16" />
+          <Property Name="cellphone" Type="int" />
+          <Property Name="eMail" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Widowmaker.dbo.CustomerAddress' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="CustomerAddress">
+          <Key>
+            <PropertyRef Name="fk_userName" />
+            <PropertyRef Name="streetAddress1" />
+            <PropertyRef Name="city" />
+            <PropertyRef Name="userState" />
+            <PropertyRef Name="zip" />
+          </Key>
+          <Property Name="fk_userName" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="streetAddress1" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="streetAddress2" Type="nvarchar" MaxLength="30" />
+          <Property Name="city" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="userState" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="zip" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Food">
+          <Key>
+            <PropertyRef Name="pk_foodID" />
+          </Key>
+          <Property Name="pk_foodID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="foodName" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="foodCost" Type="decimal" Precision="3" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MenuCategory">
+          <Key>
+            <PropertyRef Name="pk_menuCategoryID" />
+          </Key>
+          <Property Name="pk_menuCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="categoryName" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="fk_foodID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PayInformation">
+          <Key>
+            <PropertyRef Name="pk_paymentID" />
+          </Key>
+          <Property Name="pk_paymentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_userName" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="cardNumber" Type="int" Nullable="false" />
+          <Property Name="cardExpirationDate" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_cartID_CompletedTransaction">
+          <End Role="Cart" Type="Self.Cart" Multiplicity="1" />
+          <End Role="CompletedTransaction" Type="Self.CompletedTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cart">
+              <PropertyRef Name="pk_cartID" />
+            </Principal>
+            <Dependent Role="CompletedTransaction">
+              <PropertyRef Name="fk_cartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_cartItemID_Cart">
+          <End Role="CartItem" Type="Self.CartItem" Multiplicity="0..1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CartItem">
+              <PropertyRef Name="pk_cartItemID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="fk_cartItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_foodID_CartItem">
+          <End Role="Food" Type="Self.Food" Multiplicity="1" />
+          <End Role="CartItem" Type="Self.CartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="pk_foodID" />
+            </Principal>
+            <Dependent Role="CartItem">
+              <PropertyRef Name="fk_foodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_foodID_MenuCategory">
+          <End Role="Food" Type="Self.Food" Multiplicity="1" />
+          <End Role="MenuCategory" Type="Self.MenuCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="pk_foodID" />
+            </Principal>
+            <Dependent Role="MenuCategory">
+              <PropertyRef Name="fk_foodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_paymentID_CompletedTransaction">
+          <End Role="PayInformation" Type="Self.PayInformation" Multiplicity="1" />
+          <End Role="CompletedTransaction" Type="Self.CompletedTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PayInformation">
+              <PropertyRef Name="pk_paymentID" />
+            </Principal>
+            <Dependent Role="CompletedTransaction">
+              <PropertyRef Name="fk_paymentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userName_Cart">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="pk_userName" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="fk_userName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userName_CompletedTransaction">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="CompletedTransaction" Type="Self.CompletedTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="pk_userName" />
+            </Principal>
+            <Dependent Role="CompletedTransaction">
+              <PropertyRef Name="fk_userName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userName_CustomerAddress">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="CustomerAddress" Type="Self.CustomerAddress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="pk_userName" />
+            </Principal>
+            <Dependent Role="CustomerAddress">
+              <PropertyRef Name="fk_userName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userName_PayInformation">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="PayInformation" Type="Self.PayInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="pk_userName" />
+            </Principal>
+            <Dependent Role="PayInformation">
+              <PropertyRef Name="fk_userName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WidowmakerModelStoreContainer">
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CartItem" EntityType="Self.CartItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CompletedTransaction" EntityType="Self.CompletedTransaction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Food" EntityType="Self.Food" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MenuCategory" EntityType="Self.MenuCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayInformation" EntityType="Self.PayInformation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerAddress" EntityType="Self.CustomerAddress" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CustomerAddress].[fk_userName] AS [fk_userName], 
+    [CustomerAddress].[streetAddress1] AS [streetAddress1], 
+    [CustomerAddress].[streetAddress2] AS [streetAddress2], 
+    [CustomerAddress].[city] AS [city], 
+    [CustomerAddress].[userState] AS [userState], 
+    [CustomerAddress].[zip] AS [zip]
+    FROM [dbo].[CustomerAddress] AS [CustomerAddress]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="fk_cartID_CompletedTransaction" Association="Self.fk_cartID_CompletedTransaction">
+            <End Role="Cart" EntitySet="Cart" />
+            <End Role="CompletedTransaction" EntitySet="CompletedTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="fk_cartItemID_Cart" Association="Self.fk_cartItemID_Cart">
+            <End Role="CartItem" EntitySet="CartItem" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="fk_foodID_CartItem" Association="Self.fk_foodID_CartItem">
+            <End Role="Food" EntitySet="Food" />
+            <End Role="CartItem" EntitySet="CartItem" />
+          </AssociationSet>
+          <AssociationSet Name="fk_foodID_MenuCategory" Association="Self.fk_foodID_MenuCategory">
+            <End Role="Food" EntitySet="Food" />
+            <End Role="MenuCategory" EntitySet="MenuCategory" />
+          </AssociationSet>
+          <AssociationSet Name="fk_paymentID_CompletedTransaction" Association="Self.fk_paymentID_CompletedTransaction">
+            <End Role="PayInformation" EntitySet="PayInformation" />
+            <End Role="CompletedTransaction" EntitySet="CompletedTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userName_Cart" Association="Self.fk_userName_Cart">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userName_CompletedTransaction" Association="Self.fk_userName_CompletedTransaction">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="CompletedTransaction" EntitySet="CompletedTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userName_CustomerAddress" Association="Self.fk_userName_CustomerAddress">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="CustomerAddress" EntitySet="CustomerAddress" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userName_PayInformation" Association="Self.fk_userName_PayInformation">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="PayInformation" EntitySet="PayInformation" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WidowmakerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="pk_cartID" />
+          </Key>
+          <Property Name="pk_cartID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_userName" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fk_cartItemID" Type="Int32" />
+          <Property Name="totalCost" Type="Decimal" Precision="6" Scale="2" />
+          <NavigationProperty Name="CompletedTransactions" Relationship="Self.fk_cartID_CompletedTransaction" FromRole="Cart" ToRole="CompletedTransaction" />
+          <NavigationProperty Name="CartItem" Relationship="Self.fk_cartItemID_Cart" FromRole="Cart" ToRole="CartItem" />
+          <NavigationProperty Name="Customer" Relationship="Self.fk_userName_Cart" FromRole="Cart" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="CartItem">
+          <Key>
+            <PropertyRef Name="pk_cartItemID" />
+          </Key>
+          <Property Name="pk_cartItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="fk_foodID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Carts" Relationship="Self.fk_cartItemID_Cart" FromRole="CartItem" ToRole="Cart" />
+          <NavigationProperty Name="Food" Relationship="Self.fk_foodID_CartItem" FromRole="CartItem" ToRole="Food" />
+        </EntityType>
+        <EntityType Name="CompletedTransaction">
+          <Key>
+            <PropertyRef Name="pk_transactionID" />
+          </Key>
+          <Property Name="pk_transactionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_cartID" Type="Int32" Nullable="false" />
+          <Property Name="fk_userName" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fk_paymentID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cart" Relationship="Self.fk_cartID_CompletedTransaction" FromRole="CompletedTransaction" ToRole="Cart" />
+          <NavigationProperty Name="PayInformation" Relationship="Self.fk_paymentID_CompletedTransaction" FromRole="CompletedTransaction" ToRole="PayInformation" />
+          <NavigationProperty Name="Customer" Relationship="Self.fk_userName_CompletedTransaction" FromRole="CompletedTransaction" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="pk_userName" />
+          </Key>
+          <Property Name="pk_userName" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="userPassword" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="firstname" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastname" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="cellphone" Type="Int32" />
+          <Property Name="eMail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Carts" Relationship="Self.fk_userName_Cart" FromRole="Customer" ToRole="Cart" />
+          <NavigationProperty Name="CompletedTransactions" Relationship="Self.fk_userName_CompletedTransaction" FromRole="Customer" ToRole="CompletedTransaction" />
+          <NavigationProperty Name="CustomerAddresses" Relationship="Self.fk_userName_CustomerAddress" FromRole="Customer" ToRole="CustomerAddress" />
+          <NavigationProperty Name="PayInformations" Relationship="Self.fk_userName_PayInformation" FromRole="Customer" ToRole="PayInformation" />
+        </EntityType>
+        <EntityType Name="Food">
+          <Key>
+            <PropertyRef Name="pk_foodID" />
+          </Key>
+          <Property Name="pk_foodID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="foodName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="foodCost" Type="Decimal" Precision="3" Scale="2" Nullable="false" />
+          <NavigationProperty Name="CartItems" Relationship="Self.fk_foodID_CartItem" FromRole="Food" ToRole="CartItem" />
+          <NavigationProperty Name="MenuCategories" Relationship="Self.fk_foodID_MenuCategory" FromRole="Food" ToRole="MenuCategory" />
+        </EntityType>
+        <EntityType Name="MenuCategory">
+          <Key>
+            <PropertyRef Name="pk_menuCategoryID" />
+          </Key>
+          <Property Name="pk_menuCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="categoryName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fk_foodID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Food" Relationship="Self.fk_foodID_MenuCategory" FromRole="MenuCategory" ToRole="Food" />
+        </EntityType>
+        <EntityType Name="PayInformation">
+          <Key>
+            <PropertyRef Name="pk_paymentID" />
+          </Key>
+          <Property Name="pk_paymentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_userName" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cardNumber" Type="Int32" Nullable="false" />
+          <Property Name="cardExpirationDate" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CompletedTransactions" Relationship="Self.fk_paymentID_CompletedTransaction" FromRole="PayInformation" ToRole="CompletedTransaction" />
+          <NavigationProperty Name="Customer" Relationship="Self.fk_userName_PayInformation" FromRole="PayInformation" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="CustomerAddress">
+          <Key>
+            <PropertyRef Name="fk_userName" />
+            <PropertyRef Name="streetAddress1" />
+            <PropertyRef Name="city" />
+            <PropertyRef Name="userState" />
+            <PropertyRef Name="zip" />
+          </Key>
+          <Property Name="fk_userName" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="streetAddress1" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="streetAddress2" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="city" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="userState" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="zip" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="Self.fk_userName_CustomerAddress" FromRole="CustomerAddress" ToRole="Customer" />
+        </EntityType>
+        <Association Name="fk_cartID_CompletedTransaction">
+          <End Role="Cart" Type="Self.Cart" Multiplicity="1" />
+          <End Role="CompletedTransaction" Type="Self.CompletedTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cart">
+              <PropertyRef Name="pk_cartID" />
+            </Principal>
+            <Dependent Role="CompletedTransaction">
+              <PropertyRef Name="fk_cartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_cartItemID_Cart">
+          <End Role="CartItem" Type="Self.CartItem" Multiplicity="0..1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CartItem">
+              <PropertyRef Name="pk_cartItemID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="fk_cartItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userName_Cart">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="pk_userName" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="fk_userName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_foodID_CartItem">
+          <End Role="Food" Type="Self.Food" Multiplicity="1" />
+          <End Role="CartItem" Type="Self.CartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="pk_foodID" />
+            </Principal>
+            <Dependent Role="CartItem">
+              <PropertyRef Name="fk_foodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_paymentID_CompletedTransaction">
+          <End Role="PayInformation" Type="Self.PayInformation" Multiplicity="1" />
+          <End Role="CompletedTransaction" Type="Self.CompletedTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PayInformation">
+              <PropertyRef Name="pk_paymentID" />
+            </Principal>
+            <Dependent Role="CompletedTransaction">
+              <PropertyRef Name="fk_paymentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userName_CompletedTransaction">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="CompletedTransaction" Type="Self.CompletedTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="pk_userName" />
+            </Principal>
+            <Dependent Role="CompletedTransaction">
+              <PropertyRef Name="fk_userName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userName_CustomerAddress">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="CustomerAddress" Type="Self.CustomerAddress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="pk_userName" />
+            </Principal>
+            <Dependent Role="CustomerAddress">
+              <PropertyRef Name="fk_userName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userName_PayInformation">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="PayInformation" Type="Self.PayInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="pk_userName" />
+            </Principal>
+            <Dependent Role="PayInformation">
+              <PropertyRef Name="fk_userName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_foodID_MenuCategory">
+          <End Role="Food" Type="Self.Food" Multiplicity="1" />
+          <End Role="MenuCategory" Type="Self.MenuCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="pk_foodID" />
+            </Principal>
+            <Dependent Role="MenuCategory">
+              <PropertyRef Name="fk_foodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WidowmakerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Carts" EntityType="Self.Cart" />
+          <EntitySet Name="CartItems" EntityType="Self.CartItem" />
+          <EntitySet Name="CompletedTransactions" EntityType="Self.CompletedTransaction" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Foods" EntityType="Self.Food" />
+          <EntitySet Name="MenuCategories" EntityType="Self.MenuCategory" />
+          <EntitySet Name="PayInformations" EntityType="Self.PayInformation" />
+          <EntitySet Name="CustomerAddresses" EntityType="Self.CustomerAddress" />
+          <AssociationSet Name="fk_cartID_CompletedTransaction" Association="Self.fk_cartID_CompletedTransaction">
+            <End Role="Cart" EntitySet="Carts" />
+            <End Role="CompletedTransaction" EntitySet="CompletedTransactions" />
+          </AssociationSet>
+          <AssociationSet Name="fk_cartItemID_Cart" Association="Self.fk_cartItemID_Cart">
+            <End Role="CartItem" EntitySet="CartItems" />
+            <End Role="Cart" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userName_Cart" Association="Self.fk_userName_Cart">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Cart" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="fk_foodID_CartItem" Association="Self.fk_foodID_CartItem">
+            <End Role="Food" EntitySet="Foods" />
+            <End Role="CartItem" EntitySet="CartItems" />
+          </AssociationSet>
+          <AssociationSet Name="fk_paymentID_CompletedTransaction" Association="Self.fk_paymentID_CompletedTransaction">
+            <End Role="PayInformation" EntitySet="PayInformations" />
+            <End Role="CompletedTransaction" EntitySet="CompletedTransactions" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userName_CompletedTransaction" Association="Self.fk_userName_CompletedTransaction">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="CompletedTransaction" EntitySet="CompletedTransactions" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userName_CustomerAddress" Association="Self.fk_userName_CustomerAddress">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="CustomerAddress" EntitySet="CustomerAddresses" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userName_PayInformation" Association="Self.fk_userName_PayInformation">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="PayInformation" EntitySet="PayInformations" />
+          </AssociationSet>
+          <AssociationSet Name="fk_foodID_MenuCategory" Association="Self.fk_foodID_MenuCategory">
+            <End Role="Food" EntitySet="Foods" />
+            <End Role="MenuCategory" EntitySet="MenuCategories" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WidowmakerModelStoreContainer" CdmEntityContainer="WidowmakerEntities">
+          <EntitySetMapping Name="Carts">
+            <EntityTypeMapping TypeName="WidowmakerModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="pk_cartID" ColumnName="pk_cartID" />
+                <ScalarProperty Name="fk_userName" ColumnName="fk_userName" />
+                <ScalarProperty Name="fk_cartItemID" ColumnName="fk_cartItemID" />
+                <ScalarProperty Name="totalCost" ColumnName="totalCost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CartItems">
+            <EntityTypeMapping TypeName="WidowmakerModel.CartItem">
+              <MappingFragment StoreEntitySet="CartItem">
+                <ScalarProperty Name="pk_cartItemID" ColumnName="pk_cartItemID" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="fk_foodID" ColumnName="fk_foodID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompletedTransactions">
+            <EntityTypeMapping TypeName="WidowmakerModel.CompletedTransaction">
+              <MappingFragment StoreEntitySet="CompletedTransaction">
+                <ScalarProperty Name="pk_transactionID" ColumnName="pk_transactionID" />
+                <ScalarProperty Name="fk_cartID" ColumnName="fk_cartID" />
+                <ScalarProperty Name="fk_userName" ColumnName="fk_userName" />
+                <ScalarProperty Name="fk_paymentID" ColumnName="fk_paymentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="WidowmakerModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="pk_userName" ColumnName="pk_userName" />
+                <ScalarProperty Name="userPassword" ColumnName="userPassword" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="cellphone" ColumnName="cellphone" />
+                <ScalarProperty Name="eMail" ColumnName="eMail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Foods">
+            <EntityTypeMapping TypeName="WidowmakerModel.Food">
+              <MappingFragment StoreEntitySet="Food">
+                <ScalarProperty Name="pk_foodID" ColumnName="pk_foodID" />
+                <ScalarProperty Name="foodName" ColumnName="foodName" />
+                <ScalarProperty Name="foodCost" ColumnName="foodCost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MenuCategories">
+            <EntityTypeMapping TypeName="WidowmakerModel.MenuCategory">
+              <MappingFragment StoreEntitySet="MenuCategory">
+                <ScalarProperty Name="pk_menuCategoryID" ColumnName="pk_menuCategoryID" />
+                <ScalarProperty Name="categoryName" ColumnName="categoryName" />
+                <ScalarProperty Name="fk_foodID" ColumnName="fk_foodID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayInformations">
+            <EntityTypeMapping TypeName="WidowmakerModel.PayInformation">
+              <MappingFragment StoreEntitySet="PayInformation">
+                <ScalarProperty Name="pk_paymentID" ColumnName="pk_paymentID" />
+                <ScalarProperty Name="fk_userName" ColumnName="fk_userName" />
+                <ScalarProperty Name="cardNumber" ColumnName="cardNumber" />
+                <ScalarProperty Name="cardExpirationDate" ColumnName="cardExpirationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerAddresses">
+            <EntityTypeMapping TypeName="WidowmakerModel.CustomerAddress">
+              <MappingFragment StoreEntitySet="CustomerAddress">
+                <ScalarProperty Name="fk_userName" ColumnName="fk_userName" />
+                <ScalarProperty Name="streetAddress1" ColumnName="streetAddress1" />
+                <ScalarProperty Name="streetAddress2" ColumnName="streetAddress2" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="userState" ColumnName="userState" />
+                <ScalarProperty Name="zip" ColumnName="zip" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

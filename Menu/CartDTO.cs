@@ -9,18 +9,21 @@ using MenuProjectDAL;
 namespace MenuProject
 {
     [DataContract]
-    public class MenuDTO
+    public class CartDTO
     {
         [DataMember]
         public string name = "";
         [DataMember]
         public double cost { get; set; }
+        [DataMember]
+        public int quantity { get; set; }
 
-        public MenuDTO() { }
-        public MenuDTO(string foodname, double foodcost)
+        public CartDTO() { }
+        public CartDTO(string cartItemName, double cartItemCost, int quantity)
         {
-            name = foodname;
-            cost = foodcost;
+            name = cartItemName;
+            cost = cartItemCost;
+            this.quantity = quantity;
         }
     }
 }

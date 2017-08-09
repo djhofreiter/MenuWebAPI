@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="33592807c0384a3987ecea38ed578781" Name="Diagram1">
+        <EntityTypeShape EntityType="WidowmakerModel.Cart" Width="1.5" PointX="3.375" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="WidowmakerModel.CartItem" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="WidowmakerModel.CompletedTransaction" Width="1.5" PointX="7" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WidowmakerModel.Customer" Width="1.5" PointX="2.625" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="WidowmakerModel.Food" Width="1.5" PointX="0.5" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="WidowmakerModel.MenuCategory" Width="1.5" PointX="0.5" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WidowmakerModel.PayInformation" Width="1.5" PointX="7" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="WidowmakerModel.CustomerAddress" Width="1.5" PointX="4.75" PointY="9" IsExpanded="true" />
+        <AssociationConnector Association="WidowmakerModel.fk_cartID_CompletedTransaction" ManuallyRouted="false" />
+        <AssociationConnector Association="WidowmakerModel.fk_cartItemID_Cart" ManuallyRouted="false" />
+        <AssociationConnector Association="WidowmakerModel.fk_userName_Cart" ManuallyRouted="false" />
+        <AssociationConnector Association="WidowmakerModel.fk_foodID_CartItem" ManuallyRouted="false" />
+        <AssociationConnector Association="WidowmakerModel.fk_paymentID_CompletedTransaction" ManuallyRouted="false" />
+        <AssociationConnector Association="WidowmakerModel.fk_userName_CompletedTransaction" ManuallyRouted="false" />
+        <AssociationConnector Association="WidowmakerModel.fk_userName_CustomerAddress" ManuallyRouted="false" />
+        <AssociationConnector Association="WidowmakerModel.fk_userName_PayInformation" ManuallyRouted="false" />
+        <AssociationConnector Association="WidowmakerModel.fk_foodID_MenuCategory" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

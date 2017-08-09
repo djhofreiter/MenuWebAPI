@@ -6,26 +6,26 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.IO;
-using MenuWebAPI.Models;
+using MenuProjectDAL;
 
 namespace MenuProject
 {
-    public static class MenuSerializer
+    class CartSerializer
     {
-        private static Type foodType = typeof(Food);
+        private static Type cartItemType = typeof(CartItem);
         private static MemoryStream stream = null;
-        private static DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(foodType);
-        private static Food foodItem = null;
+        private static DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(cartItemType);
+        private static CartItem cartItem = null;
 
         /// <summary>
         /// serialize an object with JSON format
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static string FoodToJson(MenuDTO data)
+        public static string CartToJson(CartDTO data)
         {
             stream = new MemoryStream();
-            jsonSerializer = new DataContractJsonSerializer(foodType);
+            jsonSerializer = new DataContractJsonSerializer(cartItemType);
             jsonSerializer.WriteObject(stream, data);
             byte[] serializedData = stream.ToArray();
             stream.Close();
@@ -38,15 +38,13 @@ namespace MenuProject
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static MenuDTO JsonToFood(string data)
+        public static CartDTO JsonToCart(string data)
         {
             using (stream = new MemoryStream(Encoding.UTF8.GetBytes(data)))
             {
-                foodItem = jsonSerializer.ReadObject(stream) as Food;
+                cartItem = jsonSerializer.ReadObject(stream) as CartItem;
             }
-            return foodItem.convertFoodtoDTO();
+            return cartItem.convertCartToDTO();
         }
-
-
     }
 }

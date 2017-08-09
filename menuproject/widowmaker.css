@@ -1,0 +1,69 @@
+#menutitle {
+background-color: khaki;
+font-size: 2em;
+color: #7f2030;
+}
+
+#menu, #menuitemtitle, #menucosttitle, #addsubtractitem{
+background-color: darkkhaki;
+max-width: 100%; 
+vertical-align: bottom;
+font-size:1em;
+overflow:auto;
+
+}
+
+body {
+    background-color: #dddddd
+}
+
+#menucost{
+background-color: darkkhaki;
+max-width: 100%; 
+vertical-align: bottom;
+font-size:21px;
+}
+
+#addremove {
+background-color: darkkhaki;
+max-width: 100%; 
+vertical-align: bottom;
+font-size:17px;
+}
+
+span {
+    margin: 20px;
+    align-self: center;
+}
+
+.btn-success {
+    margin-right: 20px;
+    position: absolute;
+    right: 20px;
+}
+
+.btn-danger {
+    position:absolute;
+    right:20px;
+
+}
+
+#menu>button{
+    position: absolute;
+    right: 20px;
+}
+
+#carttitle{
+    background-color: lightgreen;
+}
+
+#cartitemtitle, #cartitemcost, #cartitemquantity, #cartItem, #cartCount, #cartCost {
+    background-color: greenyellow;
+    max-width: 100%; 
+height: auto;
+display: block;
+}
+
+body, html, .container-fluid {
+     height: 100%;
+}
